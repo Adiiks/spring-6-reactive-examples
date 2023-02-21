@@ -7,11 +7,25 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PersonRepositoryImplTest {
 
     PersonRepository personRepository = new PersonRepositoryImpl();
+
+    @Test
+    void testGetById() {
+        Mono<Person> fionaMono = personRepository.findAll()
+                .filter(person -> person.getFirstName().equals("Fiona"))
+                .next();
+
+        fionaMono.subscribe(fiona -> System.out.println(fiona.getFirstName()));
+    }
+
+    @Test
+    void testFilterOnName() {
+        personRepository.findAll()
+                .filter(person -> person.getFirstName().equals("Fiona"))
+                .subscribe(person -> System.out.println(person.getFirstName()));
+    }
 
     @Test
     void testFluxToList() {
